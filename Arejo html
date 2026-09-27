@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Destacamento</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#121212;color:white;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+.container{width:100%;max-width:450px;background:#1e1e1e;padding:30px;border-radius:18px;box-shadow:0 0 30px rgba(0,0,0,.5)}
+h1{text-align:center;margin-bottom:30px;font-size:24px}
+table{width:100%;border-collapse:collapse;overflow:hidden;border-radius:10px}
+th{background:#292929;padding:15px;font-size:15px;color:#aaa}
+td{padding:20px;text-align:center;border-bottom:1px solid #333}
+.numero{font-size:30px;font-weight:bold}
+tr:last-child td{border-bottom:none}
+.destaque{color:#fff}
+.data{font-size:18px;margin-top:20px;text-align:center;color:#bbb}
+#botaoSecreto{position:fixed;bottom:20px;right:20px;width:45px;height:45px;border:none;border-radius:50%;background:#292929;color:white;font-size:20px;cursor:pointer;transition:.3s;box-shadow:0 0 15px rgba(0,0,0,.5)}
+#botaoSecreto:hover{transform:scale(1.15);background:#444}
+#mensagem{position:fixed;bottom:75px;right:20px;width:280px;background:#1e1e1e;border:1px solid #444;padding:18px;border-radius:15px;text-align:center;font-size:15px;box-shadow:0 0 25px rgba(0,0,0,.6);opacity:0;transform:translateY(10px);pointer-events:none;transition:.3s}
+#mensagem.ativa{opacity:1;transform:translateY(0);pointer-events:auto}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>🎖️ Destacamento</h1>
+
+<table>
+<tr><th>Informação</th><th>Total</th></tr>
+<tr><td>📅 Dias no destacamento</td><td class="numero" id="dias">--</td></tr>
+<tr><td>🏖️ Dias disponíveis</td><td class="numero" id="arejo">--</td></tr>
+<tr><td>⏳ Dias faltando para 75</td><td class="numero" id="faltam">--</td></tr>
+</table>
+
+<div class="data">
+🏁 75 dias completos em:<br>
+<strong id="data75">--</strong>
+</div>
+</div>
+
+<div id="mensagem"></div>
+<button id="botaoSecreto">💀</button>
+
+<script>
+// Data em que você chegou ao destacamento
+const chegada = new Date(2026, 7, 24); // 24/08/2026
+const meta = 75;
+
+// Você já tinha 3 dias de arejo guardados quando começou
+const arejoInicial = 3;
+
+// Calcula os dias decorridos, mantendo a mesma lógica da tabela anterior
+function atualizar() {
+    const hoje = new Date();
+    hoje.setHours(0,0,0,0);
+
+    const dias = Math.max(0, Math.floor((hoje - chegada) / 86400000));
+    const arejo = arejoInicial + Math.floor(dias / 5);
+    const faltam = Math.max(0, meta - dias);
+
+    const data75 = new Date(chegada);
+    data75.setDate(data75.getDate() + meta);
+
+    document.getElementById("dias").textContent = dias;
+    document.getElementById("arejo").textContent = arejo;
+    document.getElementById("faltam").textContent = faltam;
+
+    document.getElementById("data75").textContent =
+        data75.toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        });
+}
+
+atualizar();
+setInterval(atualizar, 60000);
+
+const mensagens = [
+    "45 dias. Só mais um pequeno sofrimento militar 💀",
+    "75 dias? O destacamento já virou DLC da tua vida.",
+    "Relaxa, só faltam 45... moleza (não é).",
+    "O arejo tá trabalhando mais que tu KKKKK"
+];
+
+document.getElementById("botaoSecreto").onclick = () => {
+    const m = document.getElementById("mensagem");
+    m.textContent = mensagens[Math.floor(Math.random() * mensagens.length)];
+    m.classList.add("ativa");
+    setTimeout(() => m.classList.remove("ativa"), 3500);
+};
+</script>
+
+</body>
+</html>
